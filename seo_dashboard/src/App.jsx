@@ -44,20 +44,37 @@ function App() {
 
       <hr />
 
-      <ul>
-        {list.map(function(item) {
-          /* key attribute is used when rerendering a list,
+      <List />
+    </div>
+  );
+}
+
+export default App
+
+
+function List() {
+  return (
+    <ul>
+      {list.map(function (item) {
+        /* key attribute is used when rerendering a list,
           although not compulsory, React can more efficiently 
           check if an item has been changed. The value can be any id
           that represents the obj in a list
           If no id is present, something like a title can be used as long 
           as the title does not change. Last resort would be to use the index
           Refer to page 36 of The Road to React*/
-          return <li key={item.objectID}>{item.title}</li>;
-        })}
-      </ul>
-    </div>
-  );
-}
+        return (
+          <li key={item.objectID}>
+            <span>
+              <a href={item.url}>{item.title}</a>
+            </span>
+            <span style={{marginRight: '10px'}}>{item.author}</span>
+            <span>{item.num_comments}</span>
+            <span>{item.points}</span>
 
-export default App
+          </li>
+        );
+      })}
+    </ul>
+  )
+}
