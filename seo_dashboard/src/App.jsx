@@ -35,13 +35,10 @@ const list = [
 function App() {
   return (
     <div>
-      <h1>
-        SEO
-      </h1>
-
-      <label htmlFor="search">Search: </label>
-      <input id="search" type="text"/>
-
+      <h1>SEO</h1>
+      
+      <Search />
+      
       <hr />
 
       <List />
@@ -77,4 +74,13 @@ function List() {
       })}
     </ul>
   )
+}
+
+function Search() {
+  return (
+    <div>
+      <label htmlFor="search">Search</label>
+      <input id="search" type="text" />
+    </div>
+  );
 }
