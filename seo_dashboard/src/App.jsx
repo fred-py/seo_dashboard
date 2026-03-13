@@ -31,28 +31,55 @@ const list = [
   },
 ];
 
+const list2 = [
+  {
+    title: 'UNITED',
+    url: 'https://react.dev/',
+    author: 'JJJ', 
+    num_comments: 3,
+    points: 4,
+    objectID: 0,
+  },
+  {
+    title: 'AAA',
+    url: 'https://dectt.dev/',
+    author: 'Josh James Jacob', 
+    num_comments: 2,
+    points: 6,
+    objectID:2,
+  },
+];
 
-function App() {
-  return (
+
+// When no business logic is present and the function's only
+// purpose is to return a value, curly brackets can be removed
+// Return statement can be removed since
+// in a concise body an implicit return statement is attached.
+const App = () => (
     <div>
       <h1>SEO</h1>
       
       <Search />
-      
+    
       <hr />
 
-      <List />
+      <List list={list} />
+
+      <List list={list2}/>
     </div>
   );
-}
+
 
 export default App
 
-
-function List() {
-  return (
+// When no business logic is present and the function's only
+// This also applies when a component only returns JSX
+// purpose is to return a value, curly brackets can be removed
+// Return statement can be removed since
+// in a concise body an implicit return statement is attached.
+const List = ({ list }) => (
     <ul>
-      {list.map(function (item) {
+      {list.map((item) => {
         /* key attribute is used when rerendering a list,
           although not compulsory, React can more efficiently 
           check if an item has been changed. The value can be any id
@@ -73,10 +100,10 @@ function List() {
         );
       })}
     </ul>
-  )
-}
+  );
 
-function Search() {
+
+const Search = () => {
   return (
     <div>
       <label htmlFor="search">Search</label>
@@ -84,3 +111,21 @@ function Search() {
     </div>
   );
 }
+
+
+// Example of JS Class declaration
+class Person {
+  constructor(firsName, lastName) {
+    this.firstName = firsName;
+    this.lastName = lastName;
+  }
+  getName() {
+    return this.firstName + ' ' + this.lastName;
+  }
+}
+
+// class instantiation
+const robin = new Person('Frederico', 'Rezende');
+
+console.log(robin.getName());
+
