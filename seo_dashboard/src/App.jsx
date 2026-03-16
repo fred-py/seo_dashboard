@@ -53,9 +53,8 @@ const list2 = [
 
 // When no business logic is present and the function's only
 // purpose is to return a value, curly brackets can be removed
-// Return statement can be removed since
-// in a concise body an implicit return statement is attached.
-const App = () => (
+const App = () => {
+  return (
     <div>
       <h1>SEO</h1>
       
@@ -68,7 +67,7 @@ const App = () => (
       <List list={list2}/>
     </div>
   );
-
+}
 
 export default App
 
@@ -79,7 +78,7 @@ export default App
 // in a concise body an implicit return statement is attached.
 const List = ({ list }) => (
     <ul>
-      {list.map((item) => {
+      {list.map((item) => (
         /* key attribute is used when rerendering a list,
           although not compulsory, React can more efficiently 
           check if an item has been changed. The value can be any id
@@ -87,7 +86,6 @@ const List = ({ list }) => (
           If no id is present, something like a title can be used as long 
           as the title does not change. Last resort would be to use the index
           Refer to page 36 of The Road to React*/
-        return (
           <li key={item.objectID}>
             <span>
               <a href={item.url}>{item.title}</a>
@@ -97,17 +95,29 @@ const List = ({ list }) => (
             <span>{item.points}</span>
 
           </li>
-        );
-      })}
+        ))}
     </ul>
   );
 
 
 const Search = () => {
+  // Use 'event' as a parameter to access
+  // the event object in an event handler
+  const handleChange = (event) => {
+    // synthetic event
+    console.log(event)
+    // Value of targer (here: input HTML element)
+    console.log(event.target.value);
+  };
+  // NOTE If handleChange is a function
+  // which does not return a function
+  // use <input... onChange={handleChange}>
+  // instead of <input... onChange={handleChange()}>
+  // the latter will throw and error
   return (
     <div>
       <label htmlFor="search">Search</label>
-      <input id="search" type="text" />
+      <input id="search" type="text" onChange={handleChange} />
     </div>
   );
 }
