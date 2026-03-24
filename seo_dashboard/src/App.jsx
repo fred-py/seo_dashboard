@@ -72,11 +72,18 @@ const App = () => {
       objectID:2,
     },
   ];
+  // callback.event handler will be 
+  // passed as a function in props
+  // to another component
+  const handleSearch = (event) => {
+    console.log(event.target.value);
+
+  };
   return (
     <div>
       <h1>SEO</h1>
       
-      <Search />
+      <Search onSearch={handleSearch} />
     
       <hr />
 
@@ -122,22 +129,25 @@ const Item = (props) => (
 )
 
 
-const Search = () => {
+const Search = (props) => {
   console.log('Search Renders')
   // State is used to modify information overtime
   // eg. const [value, setValue] = React.useState('');
   // the first entry value/searchTerm refers to the current
   // state, in this case an empty string
   // the second entry setValue, is a function to update this state
-  const [searchTerm, setSearchTerm] = React.useState('');
+  const [searchTerm, setSearchTerm] = React.useState('');  // useState is a React Hook
   // Use 'event' as a parameter to access
   // the event object in an event handler
-  const handleChange = (event) => {
+  const handleChange = (event) => {  // call back handler
     // synthetic event
     console.log(event)
-    // Value of targer (here: input HTML element)
+    // Value of target (here: input HTML element)
     console.log(event.target.value);
     setSearchTerm(event.target.value);
+    // By calling onSearch on props we can pass information
+    // from a child to a parent component
+    props.onSearch(event); 
   };
   // NOTE If handleChange is a function
   // which does not return a function
