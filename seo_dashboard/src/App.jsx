@@ -6,48 +6,6 @@ import './App.css'
 // in order to avoid being redefined everytime the page is reloaded
 // NOTE: General rule, if a variable does not need parameter from within
 // the function, it can/should be defined outside that function
-const welcome = {
-  greeting: 'Hey', 
-  title: 'Fred',
-};
-
-const listss = [
-  {
-    title: 'SEO',
-    url: 'https://react.dev/',
-    author: 'Jordan Walke', 
-    num_comments: 3,
-    points: 4,
-    objectID: 0,
-  },
-  {
-    title: 'DEV',
-    url: 'https://dectt.dev/',
-    author: 'Josh James Jacob', 
-    num_comments: 2,
-    points: 6,
-    objectID:2,
-  },
-];
-
-const list2 = [
-  {
-    title: 'UNITED',
-    url: 'https://react.dev/',
-    author: 'JJJ', 
-    num_comments: 3,
-    points: 4,
-    objectID: 0,
-  },
-  {
-    title: 'AAA',
-    url: 'https://dectt.dev/',
-    author: 'Josh James Jacob', 
-    num_comments: 2,
-    points: 6,
-    objectID:2,
-  },
-];
 
 
 // When no business logic is present and the function's only
@@ -72,13 +30,28 @@ const App = () => {
       objectID:2,
     },
   ];
+  // State is used to modify information overtime
+  // eg. const [value, setValue] = React.useState('');
+  // the first entry value/searchTerm refers to the current
+  // state, in this case an empty string
+  // the second entry setValue, is a function to update this state
+  const [searchTerm, setSearchTerm] = React.useState('');  // useState is a React Hook
+  
   // callback.event handler will be 
   // passed as a function in props
   // to another component
-  const handleSearch = (event) => {
-    console.log(event.target.value);
-
+  
+  const handleSearch = (event) => {   // Use 'event' as a parameter to access
+    console.log(event.target.value);  // the event object in an event handler
+    setSearchTerm(event.target.value);
   };
+
+  // Filter stories with stateful searchTerm before passing 
+  // them to list prop
+  // Use build-in filter method
+  const searchedStories = stories.filter(function (story) {
+    return story.title.includes(searchTerm);
+  });
   return (
     <div>
       <h1>SEO</h1>
@@ -87,12 +60,26 @@ const App = () => {
     
       <hr />
 
-      <List list={stories}/>
+
+      <List list={searchedStories}/>
+      <p>
+        Searching for <strong>{searchTerm}</strong>.
+      </p>
+      
     </div>
   );
 }
 
-export default App
+
+const Search = (props) => {
+  console.log('Search Renders')
+  return (
+    <div>
+      <label htmlFor="search">Search</label>
+      <input id="search" type="text" onChange={props.onSearch} />
+    </div>
+  );
+}
 
 // When no business logic is present and the function's only
 // This also applies when a component only returns JSX
@@ -129,42 +116,6 @@ const Item = (props) => (
 )
 
 
-const Search = (props) => {
-  console.log('Search Renders')
-  // State is used to modify information overtime
-  // eg. const [value, setValue] = React.useState('');
-  // the first entry value/searchTerm refers to the current
-  // state, in this case an empty string
-  // the second entry setValue, is a function to update this state
-  const [searchTerm, setSearchTerm] = React.useState('');  // useState is a React Hook
-  // Use 'event' as a parameter to access
-  // the event object in an event handler
-  const handleChange = (event) => {  // call back handler
-    // synthetic event
-    console.log(event)
-    // Value of target (here: input HTML element)
-    console.log(event.target.value);
-    setSearchTerm(event.target.value);
-    // By calling onSearch on props we can pass information
-    // from a child to a parent component
-    props.onSearch(event); 
-  };
-  // NOTE If handleChange is a function
-  // which does not return a function
-  // use <input... onChange={handleChange}>
-  // instead of <input... onChange={handleChange()}>
-  // the latter will throw and error
-  return (
-    <div>
-      <label htmlFor="search">Search</label>
-      <input id="search" type="text" onChange={handleChange} />
-
-      <p>
-        Searching for <strong>{searchTerm}</strong>.
-      </p>
-    </div>
-  );
-}
 
 
 // Example of JS Class declaration
@@ -182,4 +133,6 @@ class Person {
 const robin = new Person('Frederico', 'Rezende');
 
 console.log(robin.getName());
+
+export default App
 
