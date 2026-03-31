@@ -14,7 +14,7 @@ const App = () => {
   console.log('App renders')
   const stories = [
     {
-      title: 'UNITED',
+      title: 'React',
       url: 'https://react.dev/',
       author: 'JJJ', 
       num_comments: 3,
@@ -22,7 +22,7 @@ const App = () => {
       objectID: 0,
     },
     {
-      title: 'AAA',
+      title: 'Redux',
       url: 'https://dectt.dev/',
       author: 'Josh James Jacob', 
       num_comments: 2,
@@ -49,9 +49,20 @@ const App = () => {
   // Filter stories with stateful searchTerm before passing 
   // them to list prop
   // Use build-in filter method
-  const searchedStories = stories.filter(function (story) {
-    return story.title.includes(searchTerm);
+  const searchedStories = stories.filter((story) => {
+    // Checks if story title exits
+    // Returns boolean
+    // toLowerCase() method must be call on both 
+    // existing title and title input
+    return story.title.toLowerCase().includes(searchTerm.toLocaleLowerCase());
+
+
+
+
+
+
   });
+
   return (
     <div>
       <h1>SEO</h1>
