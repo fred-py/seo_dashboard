@@ -1,6 +1,9 @@
 //import { useState } from 'react'
 import * as React from 'react'
+import Plot from 'react-plotly.js'
 import './App.css'
+import LineChart from './components/LineChart'
+
 
 // Variables can be defined outsite of function component
 // in order to avoid being redefined everytime the page is reloaded
@@ -76,7 +79,7 @@ const App = () => {
       <p>
         Searching for <strong>{searchTerm}</strong>.
       </p>
-      
+      <LineChart/>
     </div>
   );
 }
@@ -125,7 +128,6 @@ const Item = (props) => (
     <span>{props.item.points}</span>
   </li>
 )
-
 
 
 
