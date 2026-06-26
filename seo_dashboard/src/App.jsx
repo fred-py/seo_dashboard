@@ -1,8 +1,8 @@
-//import { useState } from 'react'
+import { useState } from 'react'
 import * as React from 'react'
 import Plot from 'react-plotly.js'
 import './App.css'
-import LineChart from './components/LineChart'
+//import LineChart from './components/LineChart'
 
 
 // Variables can be defined outsite of function component
@@ -59,11 +59,6 @@ const App = () => {
     // existing title and title input
     return story.title.toLowerCase().includes(searchTerm.toLocaleLowerCase());
 
-
-
-
-
-
   });
 
   return (
@@ -79,7 +74,10 @@ const App = () => {
       <p>
         Searching for <strong>{searchTerm}</strong>.
       </p>
-      <LineChart/>
+      ({/* keywords must be defined befere LineChart acn be added
+      <LineChart/>*/})
+      
+    
     </div>
   );
 }
