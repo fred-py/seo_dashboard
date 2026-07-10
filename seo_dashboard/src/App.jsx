@@ -38,17 +38,37 @@ const App = () => {
   // the first entry value/searchTerm refers to the current
   // state, in this case an empty string
   // the second entry setValue, is a function to update this state
-  const [searchTerm, setSearchTerm] = React.useState('React');  // useState is a React Hook
+  const [searchTerm, setSearchTerm] = React.useState(
+    localStorage.getItem('search') || 'React'
+  );  // useState is a React Hook
   
+  // useEffect to take care of reats side effects
+  // Using it here so it is centralised
+  // instead of localStorage being called from a handler
+  React.useEffect(() => {
+    localStorage.setItem('search', searchTerm)
+  }, [searchTerm]);
   // callback.event handler will be 
   // passed as a function in props
   // to another component
   
-  const handleSearch = (event) => {   // Use 'event' as a parameter to access
-    console.log(event.target.value);  // the event object in an event handler
+  // Use 'event' as a parameter to access
+  // the event object in an event handler
+  const handleSearch = (event) => {
     setSearchTerm(event.target.value);
   };
 
+  let hasStored;
+    if (localStorage.getItem('search')) {
+      hasStored = true;
+    } else {
+      hasStored = false;
+  }
+  // Refer to page 81 - saving state in
+  // localStorage so it is present on refresh 
+  const initialState = hasStored
+    ? localStorage.getItem('search')
+    : 'React';
   // Filter stories with stateful searchTerm before passing 
   // them to list prop
   // Use build-in filter method
@@ -167,6 +187,7 @@ class Person {
 const robin = new Person('Frederico', 'Rezende');
 
 console.log(robin.getName());
+
 
 
 
