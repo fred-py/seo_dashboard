@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import * as React from 'react'
 import Plot from 'react-plotly.js'
 import './App.css'
@@ -38,7 +38,7 @@ const App = () => {
   // the first entry value/searchTerm refers to the current
   // state, in this case an empty string
   // the second entry setValue, is a function to update this state
-  const [searchTerm, setSearchTerm] = React.useState('');  // useState is a React Hook
+  const [searchTerm, setSearchTerm] = React.useState('React');  // useState is a React Hook
   
   // callback.event handler will be 
   // passed as a function in props
@@ -64,11 +64,10 @@ const App = () => {
   return (
     <div>
       <h1>SEO</h1>
-      
-      <Search onSearch={handleSearch} />
+  
+      <Search search={searchTerm} onSearch={handleSearch} />
     
       <hr />
-
 
       <List list={searchedStories}/>
       <p>
@@ -82,13 +81,28 @@ const App = () => {
   );
 }
 
-
-const Search = (props) => {
-  console.log('Search Renders')
+// Object Destructing instead
+// {search, onSearch} replaces props container
+// And the props object is destructured right away  
+// in the components function signature
+// ALl the object information can be accessed instead of
+// Destructuring in the traditional way eg. props.search and props.onSearch
+// Refer to page 70
+const Search = ({search, onSearch}) => {
+  
   return (
     <div>
       <label htmlFor="search">Search</label>
-      <input id="search" type="text" onChange={props.onSearch} />
+      <input
+        id="search"
+        type="text"
+        // Assigning value attribute synchronises 
+        // both React and HTML states
+        // Without passing the value attribute
+        // HTML is not aware of the React state eg. searchTerm
+        // Refer to <Search search={searchTerm}.../>
+        value={search}
+        onChange={onSearch} />
     </div>
   );
 }
@@ -98,12 +112,18 @@ const Search = (props) => {
 // purpose is to return a value, curly brackets can be removed
 // Return statement can be removed since
 // in a concise body an implicit return statement is attached.
-const List = (props) => {
-    console.log('List renders')
+//
+const List = (list) => {  
+    // props is being deconstructed right away by passing 'list'
+    // instead of props then props.list.map()...
+
+    // List component iterates an array using map() method
+    // It calls Item component using ObjectID as a unique identifier
+    // Item component then renders a list of items
     // props are used to pass down information down to the component hierarchy
     return (
     <ul>
-      {props.list.map((item) => ( // list is assigned in the app component
+      {list.map((item) => ( // list is assigned in the app component
         /* key attribute is used when rerendering a list,
           although not compulsory, React can more efficiently 
           check if an item has been changed. The value can be any id
@@ -116,14 +136,17 @@ const List = (props) => {
     </ul>
   )};
 
-const Item = (props) => (
-  <li>
+const Item = (item) => (
+  // props is being deconstructed right away by passing 'item'
+  // instead of props then props.item.url...
+  // Item component renders a list of items
+  <li>     
     <span>
-      <a href={props.item.url}>{props.item.title}</a>
+      <a href={item.url}>{item.title}</a>
     </span>
-    <span>{props.item.author}</span>
-    <span>{props.item.num_comments}</span>
-    <span>{props.item.points}</span>
+    <span>{item.author}</span>
+    <span>{item.num_comments}</span>
+    <span>{item.points}</span>
   </li>
 )
 
@@ -144,6 +167,8 @@ class Person {
 const robin = new Person('Frederico', 'Rezende');
 
 console.log(robin.getName());
+
+
 
 export default App
 
