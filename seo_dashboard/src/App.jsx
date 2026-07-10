@@ -113,7 +113,7 @@ const Search = ({search, onSearch}) => {
 // Return statement can be removed since
 // in a concise body an implicit return statement is attached.
 //
-const List = (list) => {  
+const List = ({list}) => {  
     // props is being deconstructed right away by passing 'list'
     // instead of props then props.list.map()...
 
@@ -136,7 +136,7 @@ const List = (list) => {
     </ul>
   )};
 
-const Item = (item) => (
+const Item = ({item}) => (
   // props is being deconstructed right away by passing 'item'
   // instead of props then props.item.url...
   // Item component renders a list of items
