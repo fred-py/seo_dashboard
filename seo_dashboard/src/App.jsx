@@ -46,6 +46,7 @@ const App = () => {
   // Using it here so it is centralised
   // instead of localStorage being called from a handler
   React.useEffect(() => {
+    
     localStorage.setItem('search', searchTerm)
   }, [searchTerm]);
   // callback.event handler will be 
@@ -170,23 +171,6 @@ const Item = ({item}) => (
   </li>
 )
 
-
-
-// Example of JS Class declaration
-class Person {
-  constructor(firsName, lastName) {
-    this.firstName = firsName;
-    this.lastName = lastName;
-  }
-  getName() {
-    return this.firstName + ' ' + this.lastName;
-  }
-}
-
-// class instantiation
-const robin = new Person('Frederico', 'Rezende');
-
-console.log(robin.getName());
 
 
 
