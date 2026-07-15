@@ -10,11 +10,31 @@ import './App.css'
 // NOTE: General rule, if a variable does not need parameter from within
 // the function, it can/should be defined outside that function
 
+// State is used to modify information overtime
+  // eg. const [value, setValue] = React.useState('');
+  // the first entry value/searchTerm refers to the current
+  // state, in this case an empty string
+  // the second entry setValue, is a function to update this state
+const useStorageState = (key, initialState) => {
+    const [value, setValue] = React.useState(
+        localStorage.getItem(key) || initialState
+      );  // useState is a React Hook
+    
+    // useEffect to take care of reats side effects
+    // Using it here so it is centralised
+    // instead of localStorage being called from a handler
+    React.useEffect(() => {
+      localStorage.setItem(key, value)
+    }, [value, key]);
+    // callback.event handler will be 
+    // passed as a function in props
+    // to another component
+  return [value, setValue];
+};
 
 // When no business logic is present and the function's only
 // purpose is to return a value, curly brackets can be removed
 const App = () => {
-  console.log('App renders')
   const stories = [
     {
       title: 'React',
@@ -33,26 +53,7 @@ const App = () => {
       objectID:2,
     },
   ];
-  // State is used to modify information overtime
-  // eg. const [value, setValue] = React.useState('');
-  // the first entry value/searchTerm refers to the current
-  // state, in this case an empty string
-  // the second entry setValue, is a function to update this state
-  const [searchTerm, setSearchTerm] = React.useState(
-    localStorage.getItem('search') || 'React'
-  );  // useState is a React Hook
-  
-  // useEffect to take care of reats side effects
-  // Using it here so it is centralised
-  // instead of localStorage being called from a handler
-  React.useEffect(() => {
-    
-    localStorage.setItem('search', searchTerm)
-  }, [searchTerm]);
-  // callback.event handler will be 
-  // passed as a function in props
-  // to another component
-  
+  const [searchTerm, setSearchTerm] = useStorageState('search', 'React')
   // Use 'event' as a parameter to access
   // the event object in an event handler
   const handleSearch = (event) => {
