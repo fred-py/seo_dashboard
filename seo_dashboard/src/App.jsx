@@ -16,19 +16,23 @@ import './App.css'
   // state, in this case an empty string
   // the second entry setValue, is a function to update this state
 const useStorageState = (key, initialState) => {
-    const [value, setValue] = React.useState(
-        localStorage.getItem(key) || initialState
-      );  // useState is a React Hook
-    
-    // useEffect to take care of reats side effects
-    // Using it here so it is centralised
-    // instead of localStorage being called from a handler
-    React.useEffect(() => {
-      localStorage.setItem(key, value)
-    }, [value, key]);
-    // callback.event handler will be 
-    // passed as a function in props
-    // to another component
+  // This custom hook can be used multiple times to handle side effects
+  // Key argument must be a unique identifier
+  // Otherwise multiple hooks will work on the same local
+  // storage key/value pair
+  const [value, setValue] = React.useState(
+    localStorage.getItem(key) || initialState
+  );  // useState is a React Hook
+  
+  // useEffect to take care of reats side effects
+  // Using it here so it is centralised
+  // instead of localStorage being called from a handler
+  React.useEffect(() => {
+    localStorage.setItem(key, value)
+  }, [value, key]);
+  // callback.event handler will be 
+  // passed as a function in props
+  // to another component
   return [value, setValue];
 };
 
