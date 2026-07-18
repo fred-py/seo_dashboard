@@ -115,9 +115,15 @@ const App = () => {
 // Destructuring in the traditional way eg. props.search and props.onSearch
 // Refer to page 70
 const Search = ({search, onSearch}) => {
-  
+  // React Fragment allows for grouping of 
+  // multiple React elements without introducing
+  // additional DOM element.
+  // Eg.. below without React.Fragment
+  // the use of <div> would be needed to enable
+  // returning Label and Input side by side
+  // Short hand for frament is to simply write <></>
   return (
-    <div>
+    <React.Fragment>
       <label htmlFor="search">Search</label>
       <input
         id="search"
@@ -129,7 +135,7 @@ const Search = ({search, onSearch}) => {
         // Refer to <Search search={searchTerm}.../>
         value={search}
         onChange={onSearch} />
-    </div>
+    </React.Fragment>
   );
 }
 
