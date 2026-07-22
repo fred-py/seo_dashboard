@@ -104,9 +104,19 @@ const App = () => {
       <p>
         Searching for <strong>{searchTerm}</strong>.
       </p>
-      ({/* keywords must be defined befere LineChart acn be added
-      <LineChart/>*/})
-      
+
+      <Button handleClick={() => console.log('Clicked button 1')}>
+        Click Button 1!!
+      </Button>
+
+      <Button
+        type="submit"
+        handleClick={() => console.log('Clicked button 2')}>
+        Click Button 2 type submit!!
+      </Button>
+
+      {/* keywords must be defined before LineChart acn be added
+      <LineChart/>*/}
     
     </div>
   );
@@ -193,6 +203,19 @@ const Item = ({item}) => (
     <span>{item.points}</span>
   </li>
 )
+
+const Button = ({ type = 'button', handleClick, children }) => {
+  // Using type as a property makes the component
+  // moore generic and allows for the type to be 
+  // changed at the parent level eg. type="submit"
+  // children prop works as label
+
+  return (
+    <button type={type} onClick={handleClick}>
+      {children}
+    </button>
+  );
+};
 
 
 
