@@ -90,8 +90,13 @@ const App = () => {
   return (
     <div>
       <h1>SEO</h1>
-  
-      <Search search={searchTerm} onSearch={handleSearch} />
+
+      <InputWithLabel
+      id="search"
+      label="Search"
+      value={searchTerm}
+      onInputChange={handleSearch}
+      />
     
       <hr />
 
@@ -114,7 +119,13 @@ const App = () => {
 // ALl the object information can be accessed instead of
 // Destructuring in the traditional way eg. props.search and props.onSearch
 // Refer to page 70
-const Search = ({search, onSearch}) => {
+const InputWithLabel = ({ 
+  id,
+  label,
+  value,
+  type = 'text',
+  onInputChange,
+}) => {
   // React Fragment allows for grouping of 
   // multiple React elements without introducing
   // additional DOM element.
@@ -124,17 +135,18 @@ const Search = ({search, onSearch}) => {
   // Short hand for frament is to simply write <></>
   return (
     <React.Fragment>
-      <label htmlFor="search">Search</label>
+      <label htmlFor={id}>{label}</label>
+      &nbsp;
       <input
-        id="search"
-        type="text"
+        id="id"
+        type={type}
         // Assigning value attribute synchronises 
         // both React and HTML states
         // Without passing the value attribute
         // HTML is not aware of the React state eg. searchTerm
         // Refer to <Search search={searchTerm}.../>
-        value={search}
-        onChange={onSearch} />
+        value={value}
+        onChange={onInputChange} />
     </React.Fragment>
   );
 }
