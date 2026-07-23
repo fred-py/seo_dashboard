@@ -63,6 +63,18 @@ const App = () => {
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
   };
+  
+  // Checkbox
+  const [checkedOne, setCheckedOne] = React.useState(false);
+  const [checkedTwo, setCheckedTwo] = React.useState(false);
+
+  const handleCheckboxOne = () => {
+    setCheckedOne(!checkedOne);
+  }
+
+  const handleCheckboxTwo = () => {
+    setCheckedTwo(!checkedTwo);
+  }
 
   let hasStored;
     if (localStorage.getItem('search')) {
@@ -97,7 +109,7 @@ const App = () => {
       value={searchTerm}
       onInputChange={handleSearch}
       />
-    
+
       <hr />
 
       <List list={searchedStories}/>
@@ -115,7 +127,22 @@ const App = () => {
         Click Button 2 type submit!!
       </Button>
 
-      {/* keywords must be defined before LineChart acn be added
+      <Checkbox
+        label="Group by keyword"
+        value={checkedOne}
+        onChange={handleCheckboxOne}
+      />
+
+      <Checkbox
+        label="Group by service"
+        value={checkedTwo}
+        onChange={handleCheckboxTwo}
+      />
+
+      <p>Is "Group by keyword" checkedOne? {checkedOne.toString()}</p>
+
+
+      {/* keywords must be defined before LineChart can be added
       <LineChart/>*/}
     
     </div>
@@ -206,10 +233,9 @@ const Item = ({item}) => (
 
 const Button = ({ type = 'button', handleClick, children }) => {
   // Using type as a property makes the component
-  // moore generic and allows for the type to be 
+  // more generic and allows for the type to be 
   // changed at the parent level eg. type="submit"
   // children prop works as label
-
   return (
     <button type={type} onClick={handleClick}>
       {children}
@@ -217,8 +243,14 @@ const Button = ({ type = 'button', handleClick, children }) => {
   );
 };
 
-
-
+const Checkbox = ({ label, value, onChange }) => {
+  return (
+    <label>
+      <input type="checkbox" checked={value} onChange={onChange}/>
+      {label}
+    </label>
+  );
+};
 
 
 export default App
