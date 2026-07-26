@@ -1,7 +1,5 @@
-import { useState, useEffect } from 'react'
-import * as React from 'react'
-import Plot from 'react-plotly.js'
-import './App.css'
+import * as React from 'react';
+import './App.css';
 //import LineChart from './components/LineChart'
 
 
@@ -105,10 +103,20 @@ const App = () => {
 
       <InputWithLabel
       id="search"
-      label="Search"
       value={searchTerm}
       onInputChange={handleSearch}
-      />
+      > 
+      
+      {/*
+      React elements eg. label can be accessed
+      via the children prop instead of the label prop.
+      The children prop can be used to render everything
+      that needs to render in the <InputWithLabel>
+      opening and closing tag  
+      */}
+
+        <strong>Search:</strong> 
+      </InputWithLabel>
 
       <hr />
 
@@ -158,10 +166,10 @@ const App = () => {
 // Refer to page 70
 const InputWithLabel = ({ 
   id,
-  label,
   value,
   type = 'text',
   onInputChange,
+  children,
 }) => {
   // React Fragment allows for grouping of 
   // multiple React elements without introducing
@@ -172,7 +180,7 @@ const InputWithLabel = ({
   // Short hand for frament is to simply write <></>
   return (
     <React.Fragment>
-      <label htmlFor={id}>{label}</label>
+      <label htmlFor={id}>{children}</label>
       &nbsp;
       <input
         id="id"
