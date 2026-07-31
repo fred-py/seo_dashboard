@@ -104,6 +104,7 @@ const App = () => {
       <InputWithLabel
       id="search"
       value={searchTerm}
+      isFocused  // Shorthand for isFocused={true}
       onInputChange={handleSearch}
       > 
       
@@ -169,6 +170,7 @@ const InputWithLabel = ({
   value,
   type = 'text',
   onInputChange,
+  isFocused,
   children,
 }) => {
   // React Fragment allows for grouping of 
@@ -191,6 +193,7 @@ const InputWithLabel = ({
         // HTML is not aware of the React state eg. searchTerm
         // Refer to <Search search={searchTerm}.../>
         value={value}
+        autoFocus={isFocused}
         onChange={onInputChange} />
     </React.Fragment>
   );
