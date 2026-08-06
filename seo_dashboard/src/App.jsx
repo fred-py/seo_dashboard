@@ -2,6 +2,24 @@ import * as React from 'react';
 import './App.css';
 //import LineChart from './components/LineChart'
 
+const initialStories = [
+  {
+    title: 'React',
+    url: 'https://react.dev/',
+    author: 'JJJ', 
+    num_comments: 3,
+    points: 4,
+    objectID: 0,
+  },
+  {
+    title: 'Redux',
+    url: 'https://dectt.dev/',
+    author: 'Josh James Jacob', 
+    num_comments: 2,
+    points: 6,
+    objectID:2,
+  },
+];
 
 // Variables can be defined outsite of function component
 // in order to avoid being redefined everytime the page is reloaded
@@ -34,34 +52,32 @@ const useStorageState = (key, initialState) => {
   return [value, setValue];
 };
 
+
 // When no business logic is present and the function's only
 // purpose is to return a value, curly brackets can be removed
 const App = () => {
-  const stories = [
-    {
-      title: 'React',
-      url: 'https://react.dev/',
-      author: 'JJJ', 
-      num_comments: 3,
-      points: 4,
-      objectID: 0,
-    },
-    {
-      title: 'Redux',
-      url: 'https://dectt.dev/',
-      author: 'Josh James Jacob', 
-      num_comments: 2,
-      points: 6,
-      objectID:2,
-    },
-  ];
-  const [searchTerm, setSearchTerm] = useStorageState('search', 'React')
+  
+  const [searchTerm, setSearchTerm] = useStorageState(
+    'search',
+    'React'
+  );
+
+  const [stories, setStories] = React.useState(initialStories);
+  
+  const handleRemoveStory = (item) => {
+    const newStories = stories.filter(
+      (story) => item.objectID !== story.objectID
+    );
+    setStories(newStories);
+  };
+
   // Use 'event' as a parameter to access
   // the event object in an event handler
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
   };
   
+
   // Checkbox
   const [checkedOne, setCheckedOne] = React.useState(false);
   const [checkedTwo, setCheckedTwo] = React.useState(false);
@@ -80,21 +96,13 @@ const App = () => {
     } else {
       hasStored = false;
   }
-  // Refer to page 81 - saving state in
-  // localStorage so it is present on refresh 
-  const initialState = hasStored
-    ? localStorage.getItem('search')
-    : 'React';
-  // Filter stories with stateful searchTerm before passing 
-  // them to list prop
-  // Use build-in filter method
+
   const searchedStories = stories.filter((story) => {
     // Checks if story title exits
     // Returns boolean
     // toLowerCase() method must be call on both 
     // existing title and title input
     return story.title.toLowerCase().includes(searchTerm.toLocaleLowerCase());
-
   });
 
   return (
@@ -121,10 +129,12 @@ const App = () => {
 
       <hr />
 
-      <List list={searchedStories}/>
+      <List list={searchedStories} onRemoveItem={handleRemoveStory}/>
       <p>
         Searching for <strong>{searchTerm}</strong>.
       </p>
+
+
 
       <Button handleClick={() => console.log('Clicked button 1')}>
         Click Button 1!!
@@ -152,8 +162,7 @@ const App = () => {
 
 
       {/* keywords must be defined before LineChart can be added
-      <LineChart/>*/}
-    
+      <LineChart/>*/} 
     </div>
   );
 }
@@ -185,7 +194,7 @@ const InputWithLabel = ({
       <label htmlFor={id}>{children}</label>
       &nbsp;
       <input
-        id="id"
+        id={id}
         type={type}
         // Assigning value attribute synchronises 
         // both React and HTML states
@@ -205,7 +214,7 @@ const InputWithLabel = ({
 // Return statement can be removed since
 // in a concise body an implicit return statement is attached.
 //
-const List = ({list}) => {  
+const List = ({ list, onRemoveItem }) => {  
     // props is being deconstructed right away by passing 'list'
     // instead of props then props.list.map()...
 
@@ -223,12 +232,16 @@ const List = ({list}) => {
           If no id is present, something like a title can be used as long 
           as the title does not change. Last resort would be to use the index
           Refer to page 36 of The Road to React*/
-          <Item key={item.objectID} item={item} />
+          <Item
+            key={item.objectID}
+            item={item}
+            onRemoveItem={onRemoveItem}
+          />
         ))}
     </ul>
   )};
 
-const Item = ({item}) => (
+const Item = ({ item, onRemoveItem }) => (
   // props is being deconstructed right away by passing 'item'
   // instead of props then props.item.url...
   // Item component renders a list of items
@@ -239,6 +252,11 @@ const Item = ({item}) => (
     <span>{item.author}</span>
     <span>{item.num_comments}</span>
     <span>{item.points}</span>
+    <span>
+      <button type="button" onClick={() => onRemoveItem(item)}>
+        Dismiss
+      </button>
+    </span>
   </li>
 )
 
