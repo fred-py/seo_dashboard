@@ -21,6 +21,20 @@ const initialStories = [
   },
 ];
 
+const getAsyncStories = () =>
+  // Promises are used to manage asynchronous operations
+  // It allows components to wait for data resolution 
+  // before rendering
+  new Promise((resolve) =>
+    setTimeout(
+      () => resolve({ data: { stories: initialStories } }),
+      // Delaying render for 2 seconds to mimick
+      // real world data fetch
+      2000
+    )
+);
+
+
 // Variables can be defined outsite of function component
 // in order to avoid being redefined everytime the page is reloaded
 // NOTE: General rule, if a variable does not need parameter from within
@@ -46,7 +60,7 @@ const useStorageState = (key, initialState) => {
   React.useEffect(() => {
     localStorage.setItem(key, value)
   }, [value, key]);
-  // callback.event handler will be 
+  // callback.event handler will be
   // passed as a function in props
   // to another component
   return [value, setValue];
@@ -62,7 +76,20 @@ const App = () => {
     'React'
   );
 
-  const [stories, setStories] = React.useState(initialStories);
+  //  The empty dependency array ensures side effect 
+  // runs only once the component renders for the first time
+  const [stories, setStories] = React.useState([]);
+  const [isLoading, setIsLoading] = React.useState(false);
+
+
+  React.useEffect(() => {
+    setIsLoading(true);
+    
+    getAsyncStories().then(result => {
+      setStories(result.data.stories);
+      setIsLoading(false);
+    });
+  }, []);
   
   const handleRemoveStory = (item) => {
     // Sets new list excluding item that
@@ -110,6 +137,7 @@ const App = () => {
     return story.title.toLowerCase().includes(searchTerm.toLocaleLowerCase());
   });
 
+
   return (
     <div>
       <h1>SEO</h1>
@@ -133,13 +161,17 @@ const App = () => {
       </InputWithLabel>
 
       <hr />
-
-      <List list={searchedStories} onRemoveItem={handleRemoveStory}/>
-      <p>
-        Searching for <strong>{searchTerm}</strong>.
-      </p>
-
-
+      
+      {/* conditionally rendering the list
+        'Loading...' wil render until data is received. */}
+      {isLoading ? (
+        <p>Loading...</p>
+      ) : (
+        <List
+          list={searchedStories}
+          onRemoveItem={handleRemoveStory}
+        />
+      )}
 
       <Button handleClick={() => console.log('Clicked button 1')}>
         Click Button 1!!
@@ -258,6 +290,9 @@ const Item = ({ item, onRemoveItem }) => (
     <span>{item.num_comments}</span>
     <span>{item.points}</span>
     <span>
+      {/* Using JS bind method onClick={() => } allows
+      biding arguments directly to the function to be used
+      when executing eg. onRemoveItem(insert_argument) */}
       <button type="button" onClick={() => onRemoveItem(item)}>
         Dismiss
       </button>
