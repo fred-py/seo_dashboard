@@ -65,6 +65,11 @@ const App = () => {
   const [stories, setStories] = React.useState(initialStories);
   
   const handleRemoveStory = (item) => {
+    // Sets new list excluding item that
+    // has been removed by clicking the button
+    // New lists contains all items with an ObjectID
+    // that is not equal !==(unequal value and obj type operator)
+    // to the removed objectID
     const newStories = stories.filter(
       (story) => item.objectID !== story.objectID
     );
