@@ -2,6 +2,14 @@ import * as React from 'react';
 import './App.css';
 //import LineChart from './components/LineChart'
 
+
+
+// Variables can be defined outsite of function component
+// in order to avoid being redefined everytime the page is reloaded
+// NOTE: General rule, if a variable does not need parameter from within
+// the function, it can/should be defined outside that function
+
+
 const initialStories = [
   {
     title: 'React',
@@ -35,10 +43,30 @@ const getAsyncStories = () =>
 );
 
 
-// Variables can be defined outsite of function component
-// in order to avoid being redefined everytime the page is reloaded
-// NOTE: General rule, if a variable does not need parameter from within
-// the function, it can/should be defined outside that function
+const storiesReducer = (state, action) => {
+  // This reducer managers the state for stories
+  // based on the action type
+  // Declarative programming
+  
+  // If action.type=== 'REMOVE STORY'
+  // Sets new list excluding item that
+  // has been removed by clicking the button
+  // New lists contains all items with an ObjectID
+  // that is not equal !==(unequal value and obj type operator)
+  // to the removed objectID
+
+  
+  if (action.type === 'SET_STORIES') {
+    return action.payload
+  } else if (action.type == 'REMOVE_STORY') {
+    return state.filter(
+      (story) => action.payload.objectID !== story.objectID
+    );
+  } else {
+    throw new Error();
+  } 
+};
+
 
 // State is used to modify information overtime
   // eg. const [value, setValue] = React.useState('');
@@ -78,30 +106,37 @@ const App = () => {
 
   //  The empty dependency array ensures side effect 
   // runs only once the component renders for the first time
-  const [stories, setStories] = React.useState([]);
+  const [stories, dispatchStories] = React.useReducer(
+    storiesReducer, 
+    []
+  );
   const [isLoading, setIsLoading] = React.useState(false);
   const [isError, setIsError] = React.useState(false);
 
   React.useEffect(() => {
     setIsLoading(true);
     
-    getAsyncStories().then(result => {
-      setStories(result.data.stories);
-      setIsLoading(false);
+    getAsyncStories()
+      .then(result => {
+        dispatchStories({
+          type: 'SET_STORIES',
+          payload: result.data.stories,
+        })
+        setIsLoading(false);
     })
     .catch(() => setIsError(true));
   }, []);
   
   const handleRemoveStory = (item) => {
-    // Sets new list excluding item that
-    // has been removed by clicking the button
-    // New lists contains all items with an ObjectID
-    // that is not equal !==(unequal value and obj type operator)
-    // to the removed objectID
-    const newStories = stories.filter(
-      (story) => item.objectID !== story.objectID
-    );
-    setStories(newStories);
+    dispatchStories({
+      type: 'REMOVE_STORY',
+      payload: item,
+    });
+
+    dispatchStories({
+      type: 'SET_STORIES',
+      payload: newStories,
+    });
   };
 
   // Use 'event' as a parameter to access
