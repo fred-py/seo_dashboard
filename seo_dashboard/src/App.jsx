@@ -80,7 +80,7 @@ const App = () => {
   // runs only once the component renders for the first time
   const [stories, setStories] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(false);
-
+  const [isError, setIsError] = React.useState(false);
 
   React.useEffect(() => {
     setIsLoading(true);
@@ -88,7 +88,8 @@ const App = () => {
     getAsyncStories().then(result => {
       setStories(result.data.stories);
       setIsLoading(false);
-    });
+    })
+    .catch(() => setIsError(true));
   }, []);
   
   const handleRemoveStory = (item) => {
@@ -161,8 +162,13 @@ const App = () => {
       </InputWithLabel>
 
       <hr />
-      
-      {/* conditionally rendering the list
+      { /*Error handling triggered if any issues 
+      occur during data fetching
+      if isError is True the below paragraph will load 
+      */}
+      {isError && <p>Something went wrong...</p>}                                                        
+
+      { /* conditionally rendering the list
         'Loading...' wil render until data is received. */}
       {isLoading ? (
         <p>Loading...</p>
