@@ -55,16 +55,16 @@ const storiesReducer = (state, action) => {
   // that is not equal !==(unequal value and obj type operator)
   // to the removed objectID
 
-  
-  if (action.type === 'SET_STORIES') {
-    return action.payload
-  } else if (action.type == 'REMOVE_STORY') {
-    return state.filter(
-      (story) => action.payload.objectID !== story.objectID
-    );
-  } else {
-    throw new Error();
-  } 
+  switch (action.type) {
+    case 'SET_STORIES':
+      return action.payload;
+    case 'REMOVE_STORY':
+      return state.filter(
+        (story) => action.payload.objectID !== story.objectID
+      );
+    default:
+      throw new Error();
+  }
 };
 
 
@@ -131,11 +131,6 @@ const App = () => {
     dispatchStories({
       type: 'REMOVE_STORY',
       payload: item,
-    });
-
-    dispatchStories({
-      type: 'SET_STORIES',
-      payload: newStories,
     });
   };
 
