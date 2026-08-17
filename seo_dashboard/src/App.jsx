@@ -4,6 +4,7 @@ import './App.css';
 
 
 
+
 // Variables can be defined outsite of function component
 // in order to avoid being redefined everytime the page is reloaded
 // NOTE: General rule, if a variable does not need parameter from within
@@ -28,6 +29,11 @@ const initialStories = [
     objectID:2,
   },
 ];
+
+const STORY_ACTIONS = {
+  SET_STORIES: 'SET_STORIES',
+  REMOVE_STORY: 'REMOVE_STORY',
+}
 
 const getAsyncStories = () =>
   // Promises are used to manage asynchronous operations
@@ -56,9 +62,9 @@ const storiesReducer = (state, action) => {
   // to the removed objectID
 
   switch (action.type) {
-    case 'SET_STORIES':
+    case STORY_ACTIONS.SET_STORIES:
       return action.payload;
-    case 'REMOVE_STORY':
+    case STORY_ACTIONS.REMOVE_STORY:
       return state.filter(
         (story) => action.payload.objectID !== story.objectID
       );
