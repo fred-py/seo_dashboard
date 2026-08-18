@@ -31,7 +31,9 @@ const initialStories = [
 ];
 
 const STORY_ACTIONS = {
-  SET_STORIES: 'SET_STORIES',
+  STORIES_FETCH_INIT: 'STORIES_FETCH_INIT',
+  STORIES_FETCH_SUCCESS: 'STORIES_FETCH_SUCCESS',
+  STORIES_FETCH_FAILURE: 'STORIES_FETCH_FAILURE',
   REMOVE_STORY: 'REMOVE_STORY',
 }
 
@@ -46,28 +48,47 @@ const getAsyncStories = () =>
       // real world data fetch
       2000
     )
-);
+  );
+  
 
 
 const storiesReducer = (state, action) => {
   // This reducer managers the state for stories
   // based on the action type
   // Declarative programming
-  
   // If action.type=== 'REMOVE STORY'
   // Sets new list excluding item that
   // has been removed by clicking the button
   // New lists contains all items with an ObjectID
   // that is not equal !==(unequal value and obj type operator)
   // to the removed objectID
-
   switch (action.type) {
-    case STORY_ACTIONS.SET_STORIES:
-      return action.payload;
+    case STORY_ACTIONS.STORIES_FETCH_INIT:
+      return {
+        ...state,
+        isLoading: true,
+        isError: false,
+      };
+    case STORY_ACTIONS.STORIES_FETCH_SUCCESS:
+      return {
+        ...state,
+        data: action.payload,
+        isLoading: false,
+        isError: false,
+      };
+    case STORY_ACTIONS.STORIES_FETCH_FAILURE:
+      return {
+        ...state,
+        isLoading: false,
+        isError: true,
+      };
     case STORY_ACTIONS.REMOVE_STORY:
-      return state.filter(
-        (story) => action.payload.objectID !== story.objectID
-      );
+      return {
+        ...state,
+        data: state.data.filter(
+          (story) => action.payload.objectID !== story.objectID
+        ),
+      } ;
     default:
       throw new Error();
   }
@@ -114,23 +135,22 @@ const App = () => {
   // runs only once the component renders for the first time
   const [stories, dispatchStories] = React.useReducer(
     storiesReducer, 
-    []
+    { data: [], isLoading: false, isError: false}
   );
-  const [isLoading, setIsLoading] = React.useState(false);
-  const [isError, setIsError] = React.useState(false);
 
   React.useEffect(() => {
-    setIsLoading(true);
+    dispatchStories({ type: 'STORIES_FETCH_INIT' });
     
     getAsyncStories()
       .then(result => {
         dispatchStories({
-          type: 'SET_STORIES',
+          type: 'STORIES_FETCH_SUCCESS',
           payload: result.data.stories,
-        })
-        setIsLoading(false);
+        });
     })
-    .catch(() => setIsError(true));
+    .catch(() =>
+      dispatchStories({ type: 'STORIES_FETCH_FAILURE' })
+    );
   }, []);
   
   const handleRemoveStory = (item) => {
@@ -146,6 +166,13 @@ const App = () => {
     setSearchTerm(event.target.value);
   };
   
+  const searchedStories = stories.data.filter((story) => {
+    // Checks if story title exits
+    // Returns boolean
+    // toLowerCase() method must be call on both 
+    // existing title and title input
+    return story.title.toLowerCase().includes(searchTerm.toLowerCase());
+  });
 
   // Checkbox
   const [checkedOne, setCheckedOne] = React.useState(false);
@@ -158,22 +185,6 @@ const App = () => {
   const handleCheckboxTwo = () => {
     setCheckedTwo(!checkedTwo);
   }
-
-  let hasStored;
-    if (localStorage.getItem('search')) {
-      hasStored = true;
-    } else {
-      hasStored = false;
-  }
-
-  const searchedStories = stories.filter((story) => {
-    // Checks if story title exits
-    // Returns boolean
-    // toLowerCase() method must be call on both 
-    // existing title and title input
-    return story.title.toLowerCase().includes(searchTerm.toLocaleLowerCase());
-  });
-
 
   return (
     <div>
@@ -202,11 +213,11 @@ const App = () => {
       occur during data fetching
       if isError is True the below paragraph will load 
       */}
-      {isError && <p>Something went wrong...</p>}                                                        
+      {stories.isError && <p>Something went wrong...</p>}                                                        
 
       { /* conditionally rendering the list
         'Loading...' wil render until data is received. */}
-      {isLoading ? (
+      {stories.isLoading ? (
         <p>Loading...</p>
       ) : (
         <List
