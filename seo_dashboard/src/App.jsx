@@ -10,26 +10,6 @@ import './App.css';
 // NOTE: General rule, if a variable does not need parameter from within
 // the function, it can/should be defined outside that function
 
-
-const initialStories = [
-  {
-    title: 'React',
-    url: 'https://react.dev/',
-    author: 'JJJ', 
-    num_comments: 3,
-    points: 4,
-    objectID: 0,
-  },
-  {
-    title: 'Redux',
-    url: 'https://dectt.dev/',
-    author: 'Josh James Jacob', 
-    num_comments: 2,
-    points: 6,
-    objectID:2,
-  },
-];
-
 const STORY_ACTIONS = {
   STORIES_FETCH_INIT: 'STORIES_FETCH_INIT',
   STORIES_FETCH_SUCCESS: 'STORIES_FETCH_SUCCESS',
@@ -49,8 +29,6 @@ const getAsyncStories = () =>
       2000
     )
   );
-  
-
 
 const storiesReducer = (state, action) => {
   // This reducer managers the state for stories
@@ -94,7 +72,6 @@ const storiesReducer = (state, action) => {
   }
 };
 
-
 // State is used to modify information overtime
   // eg. const [value, setValue] = React.useState('');
   // the first entry value/searchTerm refers to the current
@@ -121,7 +98,7 @@ const useStorageState = (key, initialState) => {
   return [value, setValue];
 };
 
-
+const API_ENDPOINT = 'https://hn.algolia.com/api/v1/search?query=';
 // When no business logic is present and the function's only
 // purpose is to return a value, curly brackets can be removed
 const App = () => {
@@ -141,17 +118,18 @@ const App = () => {
   React.useEffect(() => {
     dispatchStories({ type: 'STORIES_FETCH_INIT' });
     
-    getAsyncStories()
-      .then(result => {
+    fetch(`${API_ENDPOINT}react`)
+      .then((response) => response.json())
+      .then((result) => {
         dispatchStories({
           type: 'STORIES_FETCH_SUCCESS',
-          payload: result.data.stories,
+          payload: result.hits,
         });
-    })
-    .catch(() =>
-      dispatchStories({ type: 'STORIES_FETCH_FAILURE' })
-    );
-  }, []);
+      })
+      .catch(() =>
+        dispatchStories({ type: 'STORIES_FETCH_FAILURE' })
+      );
+    }, []);    
   
   const handleRemoveStory = (item) => {
     dispatchStories({
