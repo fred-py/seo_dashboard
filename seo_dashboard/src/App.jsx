@@ -17,18 +17,7 @@ const STORY_ACTIONS = {
   REMOVE_STORY: 'REMOVE_STORY',
 }
 
-const getAsyncStories = () =>
-  // Promises are used to manage asynchronous operations
-  // It allows components to wait for data resolution 
-  // before rendering
-  new Promise((resolve) =>
-    setTimeout(
-      () => resolve({ data: { stories: initialStories } }),
-      // Delaying render for 2 seconds to mimick
-      // real world data fetch
-      2000
-    )
-  );
+
 
 const storiesReducer = (state, action) => {
   // This reducer managers the state for stories
@@ -50,7 +39,9 @@ const storiesReducer = (state, action) => {
     case STORY_ACTIONS.STORIES_FETCH_SUCCESS:
       return {
         ...state,
-        data: action.payload,
+        ranked: action.payload.ranked,
+        unranked: action.payload.unranked,
+        dropped: action.payload.dropped,
         isLoading: false,
         isError: false,
       };
@@ -60,13 +51,14 @@ const storiesReducer = (state, action) => {
         isLoading: false,
         isError: true,
       };
+    /*
     case STORY_ACTIONS.REMOVE_STORY:
       return {
         ...state,
         data: state.data.filter(
           (story) => action.payload.objectID !== story.objectID
         ),
-      } ;
+      } ; */
     default:
       throw new Error();
   }
@@ -98,33 +90,53 @@ const useStorageState = (key, initialState) => {
   return [value, setValue];
 };
 
-const API_ENDPOINT = 'https://hn.algolia.com/api/v1/search?query=';
+// API params for testing
+const apiParams = {
+  location: "Margaret River, Western Australia, Australia",
+  service: "carpet",
+  url: "https://unitedpropertyservices.au/"  
+}
+
+
+const API_ENDPOINT = 'http://localhost:8000/fetch_all/';
 // When no business logic is present and the function's only
 // purpose is to return a value, curly brackets can be removed
 const App = () => {
   
   const [searchTerm, setSearchTerm] = useStorageState(
     'search',
-    'React'
+    ''
   );
 
   //  The empty dependency array ensures side effect 
   // runs only once the component renders for the first time
   const [stories, dispatchStories] = React.useReducer(
     storiesReducer, 
-    { data: [], isLoading: false, isError: false}
+    { ranked: [],
+      unranked: [],
+      dropped: [],
+      isLoading: false,
+      isError: false,
+    }
   );
 
   React.useEffect(() => {
     dispatchStories({ type: 'STORIES_FETCH_INIT' });
     
-    fetch(`${API_ENDPOINT}react`)
+    fetch(API_ENDPOINT, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(apiParams)
+    })
       .then((response) => response.json())
       .then((result) => {
         dispatchStories({
           type: 'STORIES_FETCH_SUCCESS',
-          payload: result.hits,
+          payload: result,
         });
+        console.log(result)
       })
       .catch(() =>
         dispatchStories({ type: 'STORIES_FETCH_FAILURE' })
@@ -144,12 +156,12 @@ const App = () => {
     setSearchTerm(event.target.value);
   };
   
-  const searchedStories = stories.data.filter((story) => {
+  const searchedStories = stories.ranked.filter((story) => {
     // Checks if story title exits
     // Returns boolean
     // toLowerCase() method must be call on both 
     // existing title and title input
-    return story.title.toLowerCase().includes(searchTerm.toLowerCase());
+    return story.keyword.toLowerCase().includes(searchTerm.toLowerCase());
   });
 
   // Checkbox
@@ -315,11 +327,11 @@ const Item = ({ item, onRemoveItem }) => (
   // Item component renders a list of items
   <li>     
     <span>
-      <a href={item.url}>{item.title}</a>
+      <a href={item.id}>{item.date}</a>
     </span>
-    <span>{item.author}</span>
-    <span>{item.num_comments}</span>
-    <span>{item.points}</span>
+    <span>{item.location}</span>
+    <span>{item.keyword}</span>
+    <span>{item.position}</span>
     <span>
       {/* Using JS bind method onClick={() => } allows
       biding arguments directly to the function to be used
