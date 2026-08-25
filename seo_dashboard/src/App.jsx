@@ -1,5 +1,9 @@
 import * as React from 'react';
 import './App.css';
+import { Table } from './components/table/table';
+
+
+
 //import LineChart from './components/LineChart'
 
 
@@ -239,6 +243,10 @@ const App = () => {
       />
 
       <p>Is "Group by keyword" checkedOne? {checkedOne.toString()}</p>
+
+      <Table
+        data={searchedStories}
+      />
 
 
       {/* keywords must be defined before LineChart can be added
