@@ -1,9 +1,17 @@
-import { tableFeatures, useTable } from '@tanstack/react-table'
+import { 
+  createSortedRowModel,
+  rowSortingFeature,
+  tableFeatures,
+  useTable,
+} from '@tanstack/react-table'
 
 
 
 // 3. New in v9: declare which features this table uses (none yet)
-const features = tableFeatures({})
+const features = tableFeatures({
+  rowSortingFeature, // enables sorting APIs and state
+  sortedRowModel: createSortedRowModel(), // client-side sorting
+})
 
 // 4. Define your columns
 // Accessory key must match keys on fetched array
@@ -58,7 +66,20 @@ export function Table({ data }) {
             {headerGroup.headers.map((header) => (
               <th key={header.id}>
                 {header.isPlaceholder ? null : (
-                  <table.FlexRender header={header} />
+                  <div
+                    style={{
+                      cursor: header.column.getCanSort()
+                        ? 'pointer'
+                        : undefined,
+                    }}
+                    onClick={header.column.getToggleSortingHandler()}
+                  >
+                    <table.FlexRender header={header} />
+                    {{
+                      asc: ' 🔼',
+                      desc: ' 🔽',
+                    }[header.column.getIsSorted()] ?? null}
+                  </div>
                 )}
               </th>
             ))}
