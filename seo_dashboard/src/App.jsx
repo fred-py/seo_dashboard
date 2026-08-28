@@ -239,8 +239,10 @@ const App = () => {
       />
 
       <p>Is "Group by keyword" checkedOne? {checkedOne.toString()}</p>
-
-
+      
+      <LineChart
+        data={stories}
+      />
     </div>
   );
 }
