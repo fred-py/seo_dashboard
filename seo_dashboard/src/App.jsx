@@ -1,6 +1,6 @@
 import * as React from 'react';
 import './App.css';
-//import LineChart from './components/LineChart'
+import LineChart from './components/line-chart/LineChart'
 
 
 
@@ -241,8 +241,6 @@ const App = () => {
       <p>Is "Group by keyword" checkedOne? {checkedOne.toString()}</p>
 
 
-      {/* keywords must be defined before LineChart can be added
-      <LineChart/>*/} 
     </div>
   );
 }
