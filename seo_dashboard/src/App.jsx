@@ -19,7 +19,7 @@ const STORY_ACTIONS = {
 
 
 
-const storiesReducer = (state, action) => {
+const rankingReducer = (state, action) => {
   // This reducer managers the state for stories
   // based on the action type
   // Declarative programming
@@ -110,8 +110,8 @@ const App = () => {
 
   //  The empty dependency array ensures side effect 
   // runs only once the component renders for the first time
-  const [stories, dispatchStories] = React.useReducer(
-    storiesReducer, 
+  const [ranking, dispatchRanking] = React.useReducer(
+    rankingReducer, 
     { ranked: [],
       unranked: [],
       dropped: [],
@@ -121,7 +121,7 @@ const App = () => {
   );
 
   React.useEffect(() => {
-    dispatchStories({ type: 'STORIES_FETCH_INIT' });
+    dispatchRanking({ type: 'STORIES_FETCH_INIT' });
     
     fetch(API_ENDPOINT, {
       method: 'POST',
@@ -132,19 +132,19 @@ const App = () => {
     })
       .then((response) => response.json())
       .then((result) => {
-        dispatchStories({
+        dispatchRanking({
           type: 'STORIES_FETCH_SUCCESS',
           payload: result,
         });
         console.log(result)
       })
       .catch(() =>
-        dispatchStories({ type: 'STORIES_FETCH_FAILURE' })
+        dispatchRanking({ type: 'STORIES_FETCH_FAILURE' })
       );
     }, []);    
   
   const handleRemoveStory = (item) => {
-    dispatchStories({
+    dispatchRanking({
       type: 'REMOVE_STORY',
       payload: item,
     });
@@ -156,7 +156,7 @@ const App = () => {
     setSearchTerm(event.target.value);
   };
   
-  const searchedStories = stories.ranked.filter((story) => {
+  const searchedStories = ranking.ranked.filter((story) => {
     // Checks if story title exits
     // Returns boolean
     // toLowerCase() method must be call on both 
@@ -179,44 +179,48 @@ const App = () => {
   return (
     <div>
       <h1>SEO</h1>
-
-      <InputWithLabel
-      id="search"
-      value={searchTerm}
-      isFocused  // Shorthand for isFocused={true}
-      onInputChange={handleSearch}
-      > 
-      
-      {/*
-      React elements eg. label can be accessed
-      via the children prop instead of the label prop.
-      The children prop can be used to render everything
-      that needs to render in the <InputWithLabel>
-      opening and closing tag  
-      */}
-
-        <strong>Search:</strong> 
-      </InputWithLabel>
-
       <hr />
       { /*Error handling triggered if any issues 
       occur during data fetching
       if isError is True the below paragraph will load 
       */}
-      {stories.isError && <p>Something went wrong...</p>}                                                        
+      {ranking.isError && <p>Something went wrong...</p>}                                                        
 
       { /* conditionally rendering the list
         'Loading...' wil render until data is received. */}
-      {stories.isLoading ? (
+      {ranking.isLoading ? (
         <p>Loading...</p>
       ) : (
-        <List
-          list={searchedStories}
-          onRemoveItem={handleRemoveStory}
+        <LineChart
+        data={ranking}
         />
       )}
 
-      <Button handleClick={() => console.log('Clicked button 1')}>
+
+      <InputWithLabel
+        id="search"
+        value={searchTerm}
+        isFocused  // Shorthand for isFocused={true}
+        onInputChange={handleSearch}
+        > 
+        
+        {/*
+        React elements eg. label can be accessed
+        via the children prop instead of the label prop.
+        The children prop can be used to render everything
+        that needs to render in the <InputWithLabel>
+        opening and closing tag  
+        */}
+
+        <strong>Search:</strong> 
+      </InputWithLabel>
+
+      <List
+          list={searchedStories}
+          onRemoveItem={handleRemoveStory}
+      />
+
+<Button handleClick={() => console.log('Clicked button 1')}>
         Click Button 1!!
       </Button>
 
@@ -236,12 +240,6 @@ const App = () => {
         label="Group by service"
         value={checkedTwo}
         onChange={handleCheckboxTwo}
-      />
-
-      <p>Is "Group by keyword" checkedOne? {checkedOne.toString()}</p>
-      
-      <LineChart
-        data={stories}
       />
     </div>
   );
