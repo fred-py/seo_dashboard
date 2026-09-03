@@ -97,8 +97,8 @@ const apiParams = {
   url: "https://unitedpropertyservices.au/"  
 }
 
-
-const API_ENDPOINT = 'http://localhost:8000/fetch_all/';
+const API_ENDPOINT = 'https://seo-tracker.fastapicloud.dev/fetch_all/';
+//const API_ENDPOINT = 'http://localhost:8000/fetch_all/';
 // When no business logic is present and the function's only
 // purpose is to return a value, curly brackets can be removed
 const App = () => {
