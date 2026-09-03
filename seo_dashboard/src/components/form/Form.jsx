@@ -36,3 +36,13 @@ const metadataReducer = (state, action) => {
             throw new Error();
     }
 }
+
+
+const [metadata, dispatchMetadata] = React.useReducer(
+    metadataReducer,
+    {
+        data:[],
+        isLoadimg: false,
+        isError: false,
+    }
+);
