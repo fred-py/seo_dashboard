@@ -1,7 +1,8 @@
 import * as React from 'react';
 import './App.css';
 import LineChart from './components/line-chart/LineChart'
-
+import MetadataForm from './components/form/Form';
+import DropDown from './components/dropdown/Dropdown';
 
 
 
@@ -180,6 +181,10 @@ const App = () => {
     <div>
       <h1>SEO</h1>
       <hr />
+      <div>
+      <DropDown/>
+      </div>
+      
       { /*Error handling triggered if any issues 
       occur during data fetching
       if isError is True the below paragraph will load 
@@ -195,6 +200,8 @@ const App = () => {
         data={ranking}
         />
       )}
+
+      <MetadataForm/>
 
 
       <InputWithLabel
@@ -220,7 +227,7 @@ const App = () => {
           onRemoveItem={handleRemoveStory}
       />
 
-<Button handleClick={() => console.log('Clicked button 1')}>
+      <Button handleClick={() => console.log('Clicked button 1')}>
         Click Button 1!!
       </Button>
 
