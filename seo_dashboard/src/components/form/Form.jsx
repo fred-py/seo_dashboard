@@ -40,7 +40,6 @@ const metadataReducer = (state, action) => {
 }
 
 const MetadataForm = () => {
-
     
     const [metadata, dispatchMetadata] = React.useReducer(
         metadataReducer,
@@ -55,7 +54,16 @@ const MetadataForm = () => {
     const [selectedLocation, setSelectedLocation] = React.useState([])
     const [selectedService, setSelectedService] = React.useState([])
 
-
+    const handleLocationOne = () => {
+        // logic
+        setOpen(false);
+      };
+    
+      const handleLocationTwo = () => {
+        // logic
+        setOpen(false);
+      };
+    
 
     React.useEffect(() => {
         dispatchMetadata({ type: 'METADATA_FETCH_INIT' });
@@ -82,7 +90,6 @@ const MetadataForm = () => {
 
         return (
             <>
-                <form>
                 { /*Error handling triggered if any issues 
                 occur during data fetching
                 if isError is True the below paragraph will load 
@@ -96,16 +103,33 @@ const MetadataForm = () => {
                 ) : (
                     <>
                         <h3>Location</h3>
-                        {metadata.location.map(loc => (
-                            <Checkbox
-                                label={loc}
-                                value={selectedLocation === loc}
-                                onChange={() => setSelectedLocation(loc)}
-                            />
-                        ))};
+                        
+                            <DropDown
+                            trigger={<button>{selectedLocation} Select Location </button>}
+                            menu={metadata.location.map(loc => (
+                                <button
+                                    key={loc}
+                                    onClick={setSelectedLocation}
+                                >
+                                {loc}
+                                </button>
+                            ))}
+                          />
+
+                        <h3>Service</h3>
+                        <DropDown
+                            trigger={<button>{selectedService} Select Service </button>}
+                            menu={metadata.services.map(loc => (
+                                <button
+                                    key={loc}
+                                    onClick={setSelectedService}
+                                >
+                                {loc}
+                                </button>
+                            ))}
+                        />
                     </>
                 )}
-                </form>
             </>
         )
 }
@@ -118,6 +142,10 @@ const Checkbox = ({ label, value, onChange }) => {
       </label>
     );
   };
-
+//  <Checkbox
+//label={loc}
+//value={selectedLocation === loc}
+//onChange={() => setSelectedLocation(loc)}
+///>
 
 export default MetadataForm

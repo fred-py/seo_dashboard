@@ -2,7 +2,7 @@ import * as React from 'react';
 import './App.css';
 import LineChart from './components/line-chart/LineChart'
 import MetadataForm from './components/form/Form';
-import DropDown from './components/dropdown/Dropdown';
+//import DropDown from './components/dropdown/Dropdown';
 
 
 
@@ -176,13 +176,14 @@ const App = () => {
   const handleCheckboxTwo = () => {
     setCheckedTwo(!checkedTwo);
   }
+  
 
   return (
     <div>
       <h1>SEO</h1>
       <hr />
       <div>
-      <DropDown/>
+      <MetadataForm/>
       </div>
       
       { /*Error handling triggered if any issues 
@@ -200,9 +201,6 @@ const App = () => {
         data={ranking}
         />
       )}
-
-      <MetadataForm/>
-
 
       <InputWithLabel
         id="search"
