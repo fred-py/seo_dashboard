@@ -105,7 +105,7 @@ const App = () => {
   
   const [searchTerm, setSearchTerm] = useStorageState(
     'search',
-    'React'
+    ''
   );
 
   //  The empty dependency array ensures side effect 
@@ -116,9 +116,16 @@ const App = () => {
   );
 
   React.useEffect(() => {
+    // if 'searchTerm' is not present
+    // eg. null, empy, string, undefined
+    // do nothing
+    // more generalised condition than searchTerm === ''
+    
+    if (!searchTerm) return;
+
     dispatchStories({ type: 'STORIES_FETCH_INIT' });
     
-    fetch(`${API_ENDPOINT}react`)
+    fetch(`${API_ENDPOINT}${searchTerm}`)
       .then((response) => response.json())
       .then((result) => {
         dispatchStories({
@@ -129,7 +136,7 @@ const App = () => {
       .catch(() =>
         dispatchStories({ type: 'STORIES_FETCH_FAILURE' })
       );
-    }, []);    
+    }, [searchTerm]);    
   
   const handleRemoveStory = (item) => {
     dispatchStories({
@@ -199,7 +206,7 @@ const App = () => {
         <p>Loading...</p>
       ) : (
         <List
-          list={searchedStories}
+          list={stories.data}
           onRemoveItem={handleRemoveStory}
         />
       )}
