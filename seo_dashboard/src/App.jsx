@@ -120,7 +120,6 @@ const App = () => {
     // eg. null, empy, string, undefined
     // do nothing
     // more generalised condition than searchTerm === ''
-    
     if (!searchTerm) return;
 
     dispatchStories({ type: 'STORIES_FETCH_INIT' });
