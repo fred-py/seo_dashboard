@@ -17,19 +17,6 @@ const STORY_ACTIONS = {
   REMOVE_STORY: 'REMOVE_STORY',
 }
 
-const getAsyncStories = () =>
-  // Promises are used to manage asynchronous operations
-  // It allows components to wait for data resolution 
-  // before rendering
-  new Promise((resolve) =>
-    setTimeout(
-      () => resolve({ data: { stories: initialStories } }),
-      // Delaying render for 2 seconds to mimick
-      // real world data fetch
-      2000
-    )
-  );
-
 const storiesReducer = (state, action) => {
   // This reducer managers the state for stories
   // based on the action type
@@ -105,7 +92,7 @@ const App = () => {
   
   const [searchTerm, setSearchTerm] = useStorageState(
     'search',
-    ''
+    'React'
   );
 
   //  The empty dependency array ensures side effect 
@@ -115,7 +102,8 @@ const App = () => {
     { data: [], isLoading: false, isError: false}
   );
 
-  React.useEffect(() => {
+
+  const handleFetchStories = React.useCallback(() => {
     // if 'searchTerm' is not present
     // eg. null, empy, string, undefined
     // do nothing
@@ -135,7 +123,12 @@ const App = () => {
       .catch(() =>
         dispatchStories({ type: 'STORIES_FETCH_FAILURE' })
       );
-    }, [searchTerm]);    
+    }, [searchTerm]);  
+
+
+  React.useEffect(() => {
+    handleFetchStories();
+  }, [handleFetchStories]);    
   
   const handleRemoveStory = (item) => {
     dispatchStories({
@@ -150,13 +143,6 @@ const App = () => {
     setSearchTerm(event.target.value);
   };
   
-  const searchedStories = stories.data.filter((story) => {
-    // Checks if story title exits
-    // Returns boolean
-    // toLowerCase() method must be call on both 
-    // existing title and title input
-    return story.title.toLowerCase().includes(searchTerm.toLowerCase());
-  });
 
   // Checkbox
   const [checkedOne, setCheckedOne] = React.useState(false);
