@@ -121,7 +121,11 @@ const App = () => {
     }
   );
 
-  React.useEffect(() => {
+  const locationServicesParam = () => {
+    
+  }
+
+  const handleFetchRanking = React.useCallback(() => {
     dispatchRanking({ type: 'STORIES_FETCH_INIT' });
     
     fetch(API_ENDPOINT, {
@@ -142,8 +146,13 @@ const App = () => {
       .catch(() =>
         dispatchRanking({ type: 'STORIES_FETCH_FAILURE' })
       );
-    }, []);    
+    }, []);
   
+
+  React.useEffect(() => {
+    handleFetchRanking();
+  }, [handleFetchRanking]);
+
   const handleRemoveStory = (item) => {
     dispatchRanking({
       type: 'REMOVE_STORY',
