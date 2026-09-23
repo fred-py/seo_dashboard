@@ -91,12 +91,7 @@ const useStorageState = (key, initialState) => {
   return [value, setValue];
 };
 
-// API params for testing
-const apiParams = {
-  location: "Margaret River, Western Australia, Australia",
-  service: "carpet",
-  url: "https://unitedpropertyservices.au/"  
-}
+
 
 const API_ENDPOINT = 'https://seo-tracker.fastapicloud.dev/fetch_all/';
 //const API_ENDPOINT = 'http://localhost:8000/fetch_all/';
@@ -122,10 +117,25 @@ const App = () => {
   );
 
   const locationServicesParam = () => {
-    
+
   }
 
+  const [selectedLocation, setSelectedLocation] = React.useState([null])
+  const [selectedService, setSelectedService] = React.useState([null])
+
+  // API params
+  const apiParams = {
+    location: selectedLocation,
+    service: selectedService,
+    url: "https://unitedpropertyservices.au/"  
+}
+
   const handleFetchRanking = React.useCallback(() => {
+    if (!apiParams.location || !apiParams.service) {
+      alert('Location and service must be selected')
+      return;
+    } 
+
     dispatchRanking({ type: 'STORIES_FETCH_INIT' });
     
     fetch(API_ENDPOINT, {
@@ -146,13 +156,13 @@ const App = () => {
       .catch(() =>
         dispatchRanking({ type: 'STORIES_FETCH_FAILURE' })
       );
-    }, []);
+    }, [selectedLocation, selectedService]);
   
-
+  {/*
   React.useEffect(() => {
     handleFetchRanking();
   }, [handleFetchRanking]);
-
+  */}
   const handleRemoveStory = (item) => {
     dispatchRanking({
       type: 'REMOVE_STORY',
@@ -166,13 +176,13 @@ const App = () => {
     setSearchTerm(event.target.value);
   };
   
-  const searchedStories = ranking.ranked.filter((story) => {
+  {/*const searchedStories = ranking.ranked.filter((story) => {
     // Checks if story title exits
     // Returns boolean
     // toLowerCase() method must be call on both 
     // existing title and title input
     return story.keyword.toLowerCase().includes(searchTerm.toLowerCase());
-  });
+  }); */}
 
   // Checkbox
   const [checkedOne, setCheckedOne] = React.useState(false);
@@ -193,6 +203,9 @@ const App = () => {
       <hr />
       <div>
       <MetadataForm/>
+      <button onClick={handleFetchRanking}>
+        View Ranking
+      </button>
       </div>
       
       { /*Error handling triggered if any issues 
@@ -228,11 +241,13 @@ const App = () => {
 
         <strong>Search:</strong> 
       </InputWithLabel>
-
+      
+      {/*
       <List
           list={searchedStories}
           onRemoveItem={handleRemoveStory}
-      />
+      />*/}
+
 
       <Button handleClick={() => console.log('Clicked button 1')}>
         Click Button 1!!

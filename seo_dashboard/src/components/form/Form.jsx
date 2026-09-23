@@ -39,7 +39,12 @@ const metadataReducer = (state, action) => {
     }
 }
 
-const MetadataForm = () => {
+const MetadataForm = ({
+  selectedLocation,
+  setSelectedLocation,
+  selectedService,
+  setSelectedService
+}) => {
     
     const [metadata, dispatchMetadata] = React.useReducer(
         metadataReducer,
@@ -50,20 +55,6 @@ const MetadataForm = () => {
             isError: false,
         }
     );
-
-    const [selectedLocation, setSelectedLocation] = React.useState([])
-    const [selectedService, setSelectedService] = React.useState([])
-
-    const handleLocationOne = () => {
-        // logic
-        setOpen(false);
-      };
-    
-      const handleLocationTwo = () => {
-        // logic
-        setOpen(false);
-      };
-    
 
     React.useEffect(() => {
         dispatchMetadata({ type: 'METADATA_FETCH_INIT' });
@@ -109,7 +100,7 @@ const MetadataForm = () => {
                             menu={metadata.location.map(loc => (
                                 <button
                                     key={loc}
-                                    onClick={setSelectedLocation}
+                                    onClick={() => setSelectedLocation(loc)}
                                 >
                                 {loc}
                                 </button>
@@ -119,12 +110,12 @@ const MetadataForm = () => {
                         <h3>Service</h3>
                         <DropDown
                             trigger={<button>{selectedService} Select Service </button>}
-                            menu={metadata.services.map(loc => (
+                            menu={metadata.services.map(ser => (
                                 <button
-                                    key={loc}
-                                    onClick={setSelectedService}
+                                    key={ser}
+                                    onClick={() => setSelectedService(ser)}
                                 >
-                                {loc}
+                                {ser}
                                 </button>
                             ))}
                         />
