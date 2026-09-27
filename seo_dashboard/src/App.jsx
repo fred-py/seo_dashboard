@@ -135,7 +135,8 @@ const App = () => {
       alert('Location and service must be selected')
       return;
     } 
-
+    console.log('selectedLocation:', selectedLocation)
+    console.log('selectedService:', selectedService)
     dispatchRanking({ type: 'STORIES_FETCH_INIT' });
     
     fetch(API_ENDPOINT, {
@@ -202,8 +203,13 @@ const App = () => {
       <h1>SEO</h1>
       <hr />
       <div>
-      <MetadataForm/>
-      <button onClick={handleFetchRanking}>
+      <MetadataForm
+        selectedLocation={selectedLocation}
+        setSelectedLocation={setSelectedLocation}
+        selectedService={setSelectedService}
+        setSelectedService={setSelectedService}
+      />
+      <button onClick={handleFetchRanking} disabled={!selectedLocation || !selectedService}>
         View Ranking
       </button>
       </div>

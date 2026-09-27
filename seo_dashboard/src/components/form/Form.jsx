@@ -94,29 +94,31 @@ const MetadataForm = ({
                 ) : (
                     <>
                         <h3>Location</h3>
-                        
-                            <DropDown
-                            trigger={<button>{selectedLocation} Select Location </button>}
+                          <DropDown
+                            trigger={selectedLocation || 'Select Location'}
                             menu={metadata.location.map(loc => (
-                                <button
-                                    key={loc}
-                                    onClick={() => setSelectedLocation(loc)}
-                                >
-                                {loc}
-                                </button>
+                                <li key={loc} className='menu-item'>
+                                  <button
+                                      type='button'
+                                      onClick={() => setSelectedLocation(loc)}
+                                  >
+                                  {loc}
+                                  </button>
+                                </li>
                             ))}
                           />
-
                         <h3>Service</h3>
                         <DropDown
-                            trigger={<button>{selectedService} Select Service </button>}
+                            trigger={selectedService || 'Select Service'}
                             menu={metadata.services.map(ser => (
-                                <button
-                                    key={ser}
-                                    onClick={() => setSelectedService(ser)}
-                                >
-                                {ser}
-                                </button>
+                                <li key={ser} className='menu-item'>
+                                  <button
+                                      type='button'
+                                      onClick={() => setSelectedService(ser)}
+                                  >
+                                  {ser}
+                                  </button>
+                                </li>
                             ))}
                         />
                     </>
