@@ -120,8 +120,8 @@ const App = () => {
 
   }
 
-  const [selectedLocation, setSelectedLocation] = React.useState([null])
-  const [selectedService, setSelectedService] = React.useState([null])
+  const [selectedLocation, setSelectedLocation] = React.useState(null)
+  const [selectedService, setSelectedService] = React.useState(null)
 
   // API params
   const apiParams = {
@@ -206,7 +206,7 @@ const App = () => {
       <MetadataForm
         selectedLocation={selectedLocation}
         setSelectedLocation={setSelectedLocation}
-        selectedService={setSelectedService}
+        selectedService={selectedService}
         setSelectedService={setSelectedService}
       />
       <button onClick={handleFetchRanking} disabled={!selectedLocation || !selectedService}>
