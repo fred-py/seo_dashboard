@@ -128,7 +128,13 @@ const App = () => {
     location: selectedLocation,
     service: selectedService,
     url: "https://unitedpropertyservices.au/"  
-}
+  }
+
+  // To be used for conditional rendering
+  // of the chart
+  // If ranking.ranked is false
+  // ranking.ranked.length is not called
+  const hasData = ranking.ranked && ranking.ranked.length > 0;
 
   const handleFetchRanking = React.useCallback(() => {
     if (!apiParams.location || !apiParams.service) {
@@ -225,9 +231,7 @@ const App = () => {
       {ranking.isLoading ? (
         <p>Loading...</p>
       ) : (
-        <LineChart
-        data={ranking}
-        />
+        hasData && <LineChart data={ranking}/>
       )}
 
       <InputWithLabel
@@ -242,7 +246,7 @@ const App = () => {
         via the children prop instead of the label prop.
         The children prop can be used to render everything
         that needs to render in the <InputWithLabel>
-        opening and closing tag  
+        opening and closing tag
         */}
 
         <strong>Search:</strong> 

@@ -2,14 +2,14 @@ import React, { useState, useEffect } from 'react';
 import DropDown from '../dropdown/Dropdown';
 
 
-//const METADATA_ENDPOINT = 'https://seo-tracker.fastapicloud.dev/services/location/'
-const METADATA_ENDPOINT = 'http://localhost:8000/services/location/'
+const METADATA_ENDPOINT = 'https://seo-tracker.fastapicloud.dev/services/location/'
+//const METADATA_ENDPOINT = 'http://localhost:8000/services/location/'
 
 
 const METADATA_ACTIONS = {
     METADATA_FETCH_INIT: 'METADATA_FETCH_INIT',
     METADATA_FETCH_SUCCESS: 'METADATA_FETCH_SUCCESS',
-    METADATA_FETCH_FAILURE: 'METADATA_FETCH_SUCCESS',
+    METADATA_FETCH_FAILURE: 'METADATA_FETCH_FAILURE',
 }
 
 
@@ -117,7 +117,7 @@ const MetadataForm = ({
                                       type='button'
                                       onClick={() => setSelectedService(ser)}
                                   >
-                                  {ser}
+                                  {ser.replace(/_/g, ' ')}  {/* Removes underscore on display only */} 
                                   </button>
                                 </li>
                             ))}
