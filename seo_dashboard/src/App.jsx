@@ -215,9 +215,11 @@ const App = () => {
         selectedService={selectedService}
         setSelectedService={setSelectedService}
       />
+      <div>
       <button onClick={handleFetchRanking} disabled={!selectedLocation || !selectedService}>
         View Ranking
       </button>
+      </div>
       </div>
       
       { /*Error handling triggered if any issues 
