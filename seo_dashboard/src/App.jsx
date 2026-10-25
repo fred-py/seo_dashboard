@@ -1,6 +1,6 @@
 import * as React from 'react';
 import './App.css';
-//import LineChart from './components/LineChart'
+import axios from 'axios';
 
 
 
@@ -95,6 +95,10 @@ const App = () => {
     'React'
   );
 
+  const [url, setUrl] = React.useState(
+    `${API_ENDPOINT}${searchTerm}`
+  );
+
   //  The empty dependency array ensures side effect 
   // runs only once the component renders for the first time
   const [stories, dispatchStories] = React.useReducer(
@@ -112,18 +116,19 @@ const App = () => {
 
     dispatchStories({ type: 'STORIES_FETCH_INIT' });
     
-    fetch(`${API_ENDPOINT}${searchTerm}`)
-      .then((response) => response.json())
+    
+    axios
+      .get(url)
       .then((result) => {
         dispatchStories({
           type: 'STORIES_FETCH_SUCCESS',
-          payload: result.hits,
-        });
+          payload: result.data.hits,
+        })
       })
       .catch(() =>
         dispatchStories({ type: 'STORIES_FETCH_FAILURE' })
       );
-    }, [searchTerm]);  
+    }, [url]);  
 
 
   React.useEffect(() => {
