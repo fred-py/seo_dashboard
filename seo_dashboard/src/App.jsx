@@ -2,6 +2,8 @@ import * as React from 'react';
 import './App.css';
 import LineChart from './components/line-chart/LineChart'
 import MetadataForm from './components/form/Form';
+import axios from 'axios';
+
 //import DropDown from './components/dropdown/Dropdown';
 
 
@@ -130,6 +132,7 @@ const App = () => {
     url: "https://unitedpropertyservices.au/"  
   }
 
+
   // To be used for conditional rendering
   // of the chart
   // If ranking.ranked is false
@@ -145,20 +148,24 @@ const App = () => {
     console.log('selectedService:', selectedService)
     dispatchRanking({ type: 'STORIES_FETCH_INIT' });
     
-    fetch(API_ENDPOINT, {
+    {/*fetch(API_ENDPOINT, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(apiParams)
-    })
-      .then((response) => response.json())
+    })*/}
+
+
+    axios
+      .post(API_ENDPOINT, apiParams)
+      //.then((response))
       .then((result) => {
         dispatchRanking({
           type: 'STORIES_FETCH_SUCCESS',
-          payload: result,
+          payload: result.data,
         });
-        console.log(result)
+        console.log(result.data)
       })
       .catch(() =>
         dispatchRanking({ type: 'STORIES_FETCH_FAILURE' })
