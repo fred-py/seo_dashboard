@@ -58,29 +58,19 @@ const MetadataForm = ({
         }
     );
 
-    React.useEffect(() => {
+    React.useEffect(async() => {
         dispatchMetadata({ type: 'METADATA_FETCH_INIT' });
         
-        {/*fetch(METADATA_ENDPOINT, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        })
-          .then((response) => response.json())*/}
-        
-        axios
-          .get(METADATA_ENDPOINT)
-          .then((result) => {
-            dispatchMetadata({
-              type: 'METADATA_FETCH_SUCCESS',
-              payload: result.data,
-            });
-            console.log(result.data)
-          })
-          .catch(() =>
-            dispatchMetadata({ type: 'METADATA_FETCH_FAILURE' })
-          );
+        try {
+          const result = await axios.get(METADATA_ENDPOINT)
+          dispatchMetadata({
+            type: 'METADATA_FETCH_SUCCESS',
+            payload: result.data,
+          });
+          console.log(result.data)
+        } catch {
+          dispatchMetadata({ type: 'METADATA_FETCH_FAILURE' })
+          }
         }, []);
 
 

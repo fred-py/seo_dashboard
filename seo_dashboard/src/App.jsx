@@ -139,7 +139,7 @@ const App = () => {
   // ranking.ranked.length is not called
   const hasData = ranking.ranked && ranking.ranked.length > 0;
 
-  const handleFetchRanking = React.useCallback(() => {
+  const handleFetchRanking = React.useCallback(async() => {
     if (!apiParams.location || !apiParams.service) {
       alert('Location and service must be selected')
       return;
@@ -148,20 +148,19 @@ const App = () => {
     console.log('selectedService:', selectedService)
     dispatchRanking({ type: 'STORIES_FETCH_INIT' });
 
-    axios
-      .post(API_ENDPOINT, apiParams)
-      .then((result) => {
-        dispatchRanking({
-          type: 'STORIES_FETCH_SUCCESS',
-          payload: result.data,
-        });
-        console.log(result.data)
-      })
-      .catch(() =>
-        dispatchRanking({ type: 'STORIES_FETCH_FAILURE' })
-      );
-    }, [selectedLocation, selectedService]);
-  
+    try {
+      const result = await axios.post(API_ENDPOINT, apiParams)
+
+      dispatchRanking({
+        type: 'STORIES_FETCH_SUCCESS',
+        payload: result.data,
+      });
+      console.log(result.data)
+    } catch {
+      dispatchRanking({type: 'STORIES_FETCH_FAILURE'})
+    } 
+  }, [selectedLocation, selectedService]);
+    
   {/*
   React.useEffect(() => {
     handleFetchRanking();
