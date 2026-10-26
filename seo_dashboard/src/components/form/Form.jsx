@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import DropDown from '../dropdown/Dropdown';
+import axios from 'axios';
 
 
 const METADATA_ENDPOINT = 'https://seo-tracker.fastapicloud.dev/services/location/'
@@ -60,19 +61,22 @@ const MetadataForm = ({
     React.useEffect(() => {
         dispatchMetadata({ type: 'METADATA_FETCH_INIT' });
         
-        fetch(METADATA_ENDPOINT, {
+        {/*fetch(METADATA_ENDPOINT, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
           },
         })
-          .then((response) => response.json())
+          .then((response) => response.json())*/}
+        
+        axios
+          .get(METADATA_ENDPOINT)
           .then((result) => {
             dispatchMetadata({
               type: 'METADATA_FETCH_SUCCESS',
-              payload: result,
+              payload: result.data,
             });
-            console.log(result)
+            console.log(result.data)
           })
           .catch(() =>
             dispatchMetadata({ type: 'METADATA_FETCH_FAILURE' })

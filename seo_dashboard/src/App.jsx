@@ -147,19 +147,9 @@ const App = () => {
     console.log('selectedLocation:', selectedLocation)
     console.log('selectedService:', selectedService)
     dispatchRanking({ type: 'STORIES_FETCH_INIT' });
-    
-    {/*fetch(API_ENDPOINT, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(apiParams)
-    })*/}
-
 
     axios
       .post(API_ENDPOINT, apiParams)
-      //.then((response))
       .then((result) => {
         dispatchRanking({
           type: 'STORIES_FETCH_SUCCESS',
@@ -177,6 +167,7 @@ const App = () => {
     handleFetchRanking();
   }, [handleFetchRanking]);
   */}
+  
   const handleRemoveStory = (item) => {
     dispatchRanking({
       type: 'REMOVE_STORY',
