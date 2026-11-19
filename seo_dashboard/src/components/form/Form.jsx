@@ -58,7 +58,7 @@ const MetadataForm = ({
         }
     );
 
-    React.useEffect(async() => {
+    const fetchMetadata = React.useCallback(async() => {
         dispatchMetadata({ type: 'METADATA_FETCH_INIT' });
         
         try {
@@ -70,9 +70,12 @@ const MetadataForm = ({
           console.log(result.data)
         } catch {
           dispatchMetadata({ type: 'METADATA_FETCH_FAILURE' })
-          }
+        }
         }, []);
-
+        
+        React.useEffect(() => {
+          fetchMetadata();
+        }, [fetchMetadata]);
 
         return (
             <>
@@ -121,6 +124,7 @@ const MetadataForm = ({
             </>
         )
 }
+
 
 const Checkbox = ({ label, value, onChange }) => {
     return (
